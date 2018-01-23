@@ -1,0 +1,172 @@
+<?php
+	include "inc/common.php";
+	include "inc/access.php";
+	include "inc/style.php";
+	
+	$jisDate = $_SESSION[jisDate];
+	if($jisDate == ""){
+		$jisDate = date("Y/m/d");
+	}
+	
+	$target = $_REQUEST[target];
+	db_connection();
+	$sql = "select * from regist_table where user_number = $target";
+	$result = mysql_query($sql);
+	$h = mysql_fetch_array($result);
+?>
+
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=Shift_JIS">
+<link href="common/ks_table2.css" rel="stylesheet" type="text/css">
+<TITLE><?=TITLE?></TITLE>
+
+<STYLE type="text/css">
+<!--
+//-->
+</STYLE>
+
+<SCRIPT type="text/javascript">
+<!--
+function st_save(){
+	document.frmMain.action = "userupdate.php";
+	document.frmMain.method = "post";
+	document.frmMain.submit();
+}
+function st_change(){
+	document.frmMain.action = "userupdate_st.php";
+	document.frmMain.method = "post";
+	document.frmMain.submit();
+}
+
+//-->
+</SCRIPT>
+
+</HEAD>
+<BODY marginwidth="0px" marginheight="0px" leftMargin="0px" topMargin="0px" bgcolor="#ffffff">
+<TABLE border="0" cellpadding="0" cellspacing="0" align="center" width="100%">
+<TR><TD>
+	<TABLE border="0" cellpadding="0" cellspacing="0" width="100%"  bordercolor="">
+	<?php require("require/header.html"); ?>
+	<?php require("require/menu_yoko.html"); ?>
+	<TR>
+		<?php require("require/menu_tate.html"); ?>
+		<TD align="center" width="100%" valign="top">
+		<!-- ここから -->
+		<TABLE border="0" cellpadding="0" cellspacing="0" width="100%">
+		<TR>
+		<TD align="center" bgcolor="<?=info_bg?>" height="30">
+			<FONT color="<?=info_st_bg?>" style="font-size : 15px">
+			<B>-&nbsp;&nbsp;ユーザ登録情報詳細&nbsp;&nbsp;-</B>
+			</FONT>
+		</TD>
+		</TR>
+		</TABLE>
+		<BR>
+		<FORM method="post" name="frmMain" action = "user_save.php">
+		<TABLE class="ks" width="600" cellpadding="3" cellspacing="0">
+		<TR>
+			<TD align="center" class="ksh_t">user_number</TD>
+			<TD align="left" class="ks"><?=$h[user_number]?><input type="hidden" name="user_number" value="<?=$h[user_number]?>"></TD>
+		</TR>
+		<TR>
+			<TD align="center" class="ksh_t">galaxy_id</TD>
+			<TD align="left" class="ks"><INPUT type="text" name="galaxy_id" value="<?=$h[galaxy_id]?>"></TD>
+		</TR>
+		<TR>
+			<TD align="center" class="ksh_t">insert_date</TD>
+			<TD align="left" class="ks"><INPUT type="text" name="insert_date" value="<?=$h[insert_date]?>"></TD>
+		</TR>
+		<TR>
+			<TD align="center" class="ksh_t">user_first</TD>
+			<TD align="left" class="ks"><INPUT type="text" name="user_first" value="<?=$h[user_first]?>"></TD>
+		</TR>
+		<TR>
+			<TD align="center" class="ksh_t">user_last</TD>
+			<TD align="left" class="ks"><INPUT type="text" name="user_last" value="<?=$h[user_last]?>"></TD>
+		</TR>
+		<TR>
+			<TD align="center" class="ksh_t">user_country</TD>
+			<TD align="left" class="ks"><INPUT type="text" name="user_country" value="<?=$h[user_country]?>"></TD>
+		</TR>
+		<TR>
+			<TD align="center" class="ksh_t">user_zip</TD>
+			<TD align="left" class="ks"><INPUT type="text" name="user_zip" value="<?=$h[user_zip]?>"></TD>
+		</TR>
+		<TR>
+			<TD align="center" class="ksh_t">user_group</TD>
+			<TD align="left" class="ks"><INPUT type="text" name="user_group" size="50" value="<?=$h[user_group]?>"></TD>
+		</TR>
+		<TR>
+			<TD align="center" class="ksh_t">user_sex</TD>
+			<TD align="left" class="ks"><INPUT type="text" name="user_sex" size="2" value="<?=$h[user_sex]?>"></TD>
+		</TR>
+		<TR>
+			<TD align="center" class="ksh_t">user_mail</TD>
+			<TD align="left" class="ks"><INPUT type="text" name="user_mail" size="50" value="<?=$h[user_mail]?>"></TD>
+		</TR>
+		<TR>
+			<TD align="center" class="ksh_t">user_mode</TD>
+			<TD align="left" class="ks"><INPUT type="text" name="user_mode" value="<?=$h[user_mode]?>"></TD>
+		</TR>
+		<TR>
+			<TD align="center" class="ksh_t">user_pass</TD>
+			<TD align="left" class="ks"><INPUT type="text" name="user_pass" value="<?=$h[user_pass]?>"></TD>
+		</TR>
+		<TR>
+			<TD align="center" class="ksh_t">galaxy_admin</TD>
+			<TD align="left" class="ks"><INPUT type="text" name="galaxy_admin" size="2" value="<?=$h[galaxy_admin]?>"></TD>
+		</TR>
+		<TR>
+			<TD align="center" class="ksh_t">user_graph</TD>
+			<TD align="left" class="ks"><INPUT type="text" name="user_graph" size="5" value="<?=$h[user_graph]?>"></TD>
+		</TR>
+		<TR>
+			<TD align="center" class="ksh_t">user_mark1</TD>
+			<TD align="left" class="ks"><INPUT type="text" name="user_mark1_c" size="6" value="<?=$h[user_mark1_c]?>">&nbsp;<INPUT type="text" name="user_mark1" value="<?=$h[user_mark1]?>"></TD>
+		</TR>
+		<TR>
+			<TD align="center" class="ksh_t">user_mark2</TD>
+			<TD align="left" class="ks"><INPUT type="text" name="user_mark2_c" size="6" value="<?=$h[user_mark2_c]?>">&nbsp;<INPUT type="text" name="user_mark2" value="<?=$h[user_mark2]?>"></TD>
+		</TR>
+		<TR>
+			<TD align="center" class="ksh_t">user_mark3</TD>
+			<TD align="left" class="ks"><INPUT type="text" name="user_mark3_c" size="6" value="<?=$h[user_mark3_c]?>">&nbsp;<INPUT type="text" name="user_mark3" value="<?=$h[user_mark3]?>"</TD>
+		</TR>
+		<TR>
+			<TD align="center" class="ksh_t">user_bg_c</TD>
+			<TD align="left" class="ks"><INPUT type="text" name="user_bg_c" size="6" value="<?=$h[user_bg_c]?>"></TD>
+		</TR>
+		<TR>
+			<TD align="center" class="ksh_t">mark1</TD>
+			<TD align="left" class="ks"><TEXTAREA name="mark1" rows="5" cols="60"><?=$h[mark1]?></TEXTAREA></TD>
+		</TR>
+		<TR>
+			<TD align="center" class="ksh_t">mark2</TD>
+			<TD align="left" class="ks"><TEXTAREA name="mark2" rows="5" cols="60"><?=$h[mark2]?></TEXTAREA></TD>
+		</TR>
+		<TR>
+			<TD align="center" class="ksh_t">mark3</TD>
+			<TD align="left" class="ks"><TEXTAREA name="mark3" rows="5" cols="60"><?=$h[mark3]?></TEXTAREA></TD>
+		</TR>
+		<TR>
+			<TD align="center" class="ksh_t">stats</TD>
+			<TD align="left" class="ks"><INPUT type="text" name="stat" size="6" value="<?=$h[stat]?>"></TD>
+		</TR>
+		</TABLE>
+		
+		<INPUT type="button" value=" - 保存 - " onClick="javascript:st_save();">
+		<INPUT type="button" value=" - ステータス変更 - " onClick="javascript:st_change();">
+		<INPUT type="button" value=" - 戻る - " onClick="history.back();">
+		<BR>
+		<BR>
+		
+		<!-- ここまで -->
+	</TD>
+	</TR>
+	<?php require("require/fooder.html"); ?>
+	</TABLE>
+</TD></TR>
+</TABLE>
+</BODY>
+</HTML>

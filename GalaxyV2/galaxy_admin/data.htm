@@ -1,0 +1,78 @@
+<?php
+	include "inc/common.php";
+	include "inc/access.php";
+	include "inc/style.php";
+	
+	$jisDate = $_SESSION[jisDate];
+	if($jisDate == ""){
+		$jisDate = date("Y/m/d");
+	}
+	
+	$target_table = "oligo_table_bk";
+	$target_row = "oligo_id,oligo_pref,oligo_source";
+	
+?>
+
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=Shift_JIS">
+<link href="common/ks_table2.css" rel="stylesheet" type="text/css">
+<TITLE><?=TITLE?></TITLE>
+
+<STYLE type="text/css">
+<!--
+//-->
+</STYLE>
+
+<SCRIPT type="text/javascript">
+<!--
+//-->
+</SCRIPT>
+
+</HEAD>
+<BODY marginwidth="0px" marginheight="0px" leftMargin="0px" topMargin="0px" bgcolor="#ffffff">
+<TABLE border="0" cellpadding="0" cellspacing="0" align="center" width="100%">
+<TR><TD>
+	<TABLE border="0" cellpadding="0" cellspacing="0" width="100%"  bordercolor="">
+	<?php require("require/header.html"); ?>
+	<?php require("require/menu_yoko.html"); ?>
+	<TR>
+		<?php require("require/menu_tate.html"); ?>
+		<TD align="center" width="100%" valign="top">
+		<!-- ここから -->
+		<TABLE border="0" cellpadding="0" cellspacing="0" width="100%">
+		<TR>
+		<TD align="center" bgcolor="<?=info_bg?>" height="30">
+			<FONT color="<?=info_st_bg?>" style="font-size : 15px">
+			<B>-&nbsp;&nbsp;データ抽出&nbsp;&nbsp;-</B>
+			</FONT>
+		</TD>
+		</TR>
+		</TABLE>
+		
+		<BR>
+		<TABLE border="0" cellpadding="0" cellspacing="0" width="650">
+		<TR>
+			<TD>
+			<?
+			db_connection();
+			$sqls = "select $target_row from $target_table ORDER BY oligo_id;";
+			$results = mysql_query($sqls);
+			echo "登録数: " . mysql_num_rows($results) ."<BR>";
+			while($h=mysql_fetch_array($results)){
+			?>
+			update oligo_table set oligo_pref = '<?=$h[oligo_pref]?>', oligo_source = '<?=$h[oligo_source]?>' where oligo_id = <?=$h[oligo_id]?>;<BR>
+			<? } ?>
+			<BR>
+			</TD>
+		</TR>
+		</TABLE>
+		<!-- ここまで -->
+	</TD>
+	</TR>
+	<?php require("require/fooder.html"); ?>
+	</TABLE>
+</TD></TR>
+</TABLE>
+</BODY>
+</HTML>

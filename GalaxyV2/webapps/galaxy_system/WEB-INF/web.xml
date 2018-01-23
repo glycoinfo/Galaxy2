@@ -1,0 +1,60 @@
+<?xml version="1.0" ?>
+<!DOCTYPE web-app PUBLIC
+  "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
+  "http://java.sun.com/dtd/web-app_2_3.dtd">
+
+<web-app>
+  <display-name>Galaxy Version2</display-name>
+  <description>
+  	Galaxy Version2 servelt and jsp page.
+  </description>
+  <filter>
+  	<filter-name>AccessFilter</filter-name>
+	<filter-class>AccessFilter</filter-class>
+  </filter>
+  <filter-mapping>
+  	<filter-name>AccessFilter</filter-name>
+	<url-pattern>/SessionServlet</url-pattern>
+  </filter-mapping>
+  
+  
+  <listener>
+  <listener-class>mod.SessionCount</listener-class>
+  </listener>
+  
+  <servlet>
+    <servlet-name>SessionServlet</servlet-name>
+    <servlet-class>SessionServlet</servlet-class>
+  </servlet>
+  <servlet>
+  	<servlet-name>user_confirm</servlet-name>
+	<servlet-class>user_confirm</servlet-class>
+  </servlet>
+  
+  <servlet-mapping>
+    <servlet-name>SessionServlet</servlet-name>
+    <url-pattern>/SessionServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+  	<servlet-name>user_confirm</servlet-name>
+	<url-pattern>/user_confirm</url-pattern>
+  </servlet-mapping>
+  
+  <servlet-mapping>
+  	<servlet-name>invoker</servlet-name>
+	<url-pattern>/servlet/*</url-pattern>
+  </servlet-mapping>
+  
+  <session-config>
+    <session-timeout>30</session-timeout>
+  </session-config>
+  
+  <error-page>
+  	<error-code>404</error-code>
+	<location>/message/404.jsp</location>
+  </error-page>
+  <error-page>
+  	<error-code>500</error-code>
+	<location>/message/500.jsp</location>
+  </error-page>
+</web-app>

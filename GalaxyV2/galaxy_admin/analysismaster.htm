@@ -1,0 +1,204 @@
+<?php
+	include "inc/common.php";
+	include "inc/access.php";
+	include "inc/style.php";
+	$script_name = "analysismaster.htm";
+	
+	$jisDate = $_SESSION[jisDate];
+	if($jisDate == ""){
+		$jisDate = date("Y/m/d");
+	}
+	
+	$limit = $_REQUEST[limit];
+	
+	$view1 = $_REQUEST[view1];
+	$view2 = $_REQUEST[view2];
+	
+	$sort1 = $_REQUEST[sort1];
+	$sort2 = $_REQUEST[sort2];
+	
+	$viewnum = $_REQUEST[viewnum];
+	
+	if($limit == "" || $limit <= 0){
+		$limit = 0;
+	}
+	if($view1 == ""){
+		$view1 = "analysis_id";
+	}
+	if($view2 == ""){
+		$view2 = "DESC";
+	}
+	if($sort1 ==""){
+		$sort1 = "";
+	}
+	if($sort2 == ""){
+		$sort2 = "";
+	}
+	if($viewnum == ""){
+		$viewnum = 20;
+	}
+	$target_table = "analysis_log";
+	$target_row = "analysis_id";
+	$width="1000";
+	
+	$_SESSION[return_q] = $_SERVER["QUERY_STRING"];
+?>
+
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=Shift_JIS">
+<link href="common/ks_table2.css" rel="stylesheet" type="text/css">
+<TITLE><?=TITLE?></TITLE>
+
+<STYLE type="text/css">
+<!--
+//-->
+</STYLE>
+
+<SCRIPT type="text/javascript">
+<!--
+	function limitchange(set_value){
+		document.frm1.limit.value = set_value;
+		document.frm1.submit();
+	}
+	function viewnumchange(set_value){
+		document.frm1.viewnum.value = set_value;
+		document.frm1.submit();
+	}
+	function viewchange(set_value1,set_value2){
+		document.frm1.view1.value = set_value1;
+		document.frm1.view2.value = set_value2;
+		document.frm1.submit();
+	}
+	function resetsubmit(){
+		document.frm1.limit.value = "";
+		document.frm1.view1.value = "";
+		document.frm1.view2.value = "";
+		document.frm1.sort1.value = "";
+		document.frm1.sort2.value = "";
+		document.frm1.viewnum.value = "";
+		document.frm1.submit();
+	}
+//-->
+</SCRIPT>
+
+</HEAD>
+<BODY marginwidth="0px" marginheight="0px" leftMargin="0px" topMargin="0px" bgcolor="#ffffff">
+<TABLE border="0" cellpadding="0" cellspacing="0" align="center" width="100%">
+<TR><TD>
+
+<TABLE border="0" cellpadding="0" cellspacing="0" width="100%" bordercolor="">
+	<?php require("require/header.html"); ?>
+	<?php require("require/menu_yoko.html"); ?>
+	<TR>
+		<?php require("require/menu_tate.html"); ?>
+		<TD align="center" width="100%" valign="top">
+		
+	<!-- ここから -->
+	<TABLE border="0" cellpadding="0" cellspacing="0" width="100%">
+	<TR>
+	<TD align="center" bgcolor="<?=info_bg?>" height="30">
+		<FONT color="<?=info_st_bg?>" style="font-size : 15px">
+		<B>-&nbsp;&nbsp;登録データ(利用者管理)&nbsp;<A href="http://www.glycoanalysis.net/galaxy2/systemin2.jsp" target=_blank>(site)</A>&nbsp;&nbsp;-</B>
+		</FONT>
+	</TD>
+	</TR>
+	</TABLE>
+	<BR>
+	<FORM method="get" name="frm1" action="<?=$script_name?>">
+	<SELECT name="sort1">
+		<OPTION value="" selected>--</OPTION>
+		<OPTION value="analysis_user" <? if($sort1=="analysis_user"){ echo selected; }?> >analysis_user</OPTION>
+		<OPTION value="analysis_target" <? if($sort1=="analysis_target"){ echo selected; }?> >analysis_target</OPTION>
+		<OPTION value="analysis_enz" <? if($sort1=="analysis_enz"){ echo selected; }?> >analysis_enz</OPTION>
+		<OPTION value="analysis_flag" <? if($sort1=="analysis_flag"){ echo selected; }?> >analysis_flag</OPTION>
+	</SELECT>
+	<INPUT type="text" name="sort2" value=<?=$sort2?> >
+	<INPUT type="submit" value=" - 検索 - ">
+	<INPUT type="button" value=" - クリア - " onClick="resetsubmit();">
+	<INPUT type="hidden" name="limit" value="<?=$limit?>">
+	<INPUT type="hidden" name="view1" value="<?=$view1?>">
+	<INPUT type="hidden" name="view2" value="<?=$view2?>">
+	<INPUT type="hidden" name="viewnum" value="<?=$viewnum?>">
+	<!--<INPUT type="button" value=" - To CSV - " onClick="location.href='galaxy_dl.php';">-->
+	</FORM>
+	
+	<?
+	db_connection();
+	$sqls = "select $target_row from $target_table ORDER BY analysis_date;";
+	$results = mysql_query($sqls);
+	echo "登録数: " . mysql_num_rows($results);
+	
+	
+	$sort_st = "";
+	if($sort1 != "" && $sort2 != ""){
+		$sort_st = "WHERE $sort1 LIKE '%$sort2%'";
+	}
+	
+	
+	$sql = "select * from $target_table $sort_st ORDER BY $view1 $view2 LIMIT $limit,$viewnum;";
+	$dlsql = "select * from $target_table $sort_st ORDER BY $view1 $view2;";
+	$_SESSION[dlsql] = $dlsql;
+	
+	$result = mysql_query($sql);
+	print "<table border=0 width=\"$width\" height=25 cellpadding=0 cellspacing=0 bordercolor=\"white\">\n";
+	if($limit == "" || $limit == "0"){
+		print "<tr><td align=left><font color=\"#666666\"> ← [　前の $viewnum 件　] </font></td><td align=center colspan=4><B>".($limit)."-".($limit+$viewnum)."</B></td><td align=right><A href=\"javascript:limitchange('".( $limit+$viewnum )."');\"><b>[　次の $viewnum 件　] → </b></A></td></tr>";
+	}else{
+		print "<tr><td align=left><A href=\"javascript:limitchange('".( $limit-$viewnum )."');\"><b> ← [　前の $viewnum 件　] </b></A></td><td align=center colspan=4><B>".($limit)."-".($limit+$viewnum)."</B></td><td align=right><A href=\"javascript:limitchange('".( $limit+$viewnum )."');\"><b>[　次の $viewnum 件　] → </b></A></td></tr>";
+	}
+	print "</table>\n";
+	?>
+	
+	<TABLE class="ks" width="<?=$width?>" cellpadding="3" cellspacing="0">
+	<tr bgcolor="#FFCC66">
+	<th class="ksh_y"><font style="font-size: 12px"><A href="javascript:viewchange('analysis_id','DESC');">▼</A>&nbsp;id&nbsp;<A href="javascript:viewchange('analysis_id','ASC');">▲</A></font></th>
+		<th class="ksh_y"><font style="font-size: 12px"><A href="javascript:viewchange('analysis_user','DESC');">▼</A>&nbsp;user&nbsp;<A href="javascript:viewchange('analysis_user','ASC');">▲</A></font></th>
+	<th class="ksh_y"><font style="font-size: 12px"><A href="javascript:viewchange('analysis_target','DESC');">▼</A>&nbsp;target&nbsp;<A href="javascript:viewchange('analysis_target','ASC');">▲</A></font></th>
+	<th class="ksh_y"><font style="font-size: 12px"><A href="javascript:viewchange('analysis_enz','DESC');">▼</A>&nbsp;enz&nbsp;<A href="javascript:viewchange('analysis_enz','ASC');">▲</A></font></th>
+	<th class="ksh_y"><font style="font-size: 12px"><A href="javascript:viewchange('analysis_flag','DESC');">▼</A>&nbsp;flag&nbsp;<A href="javascript:viewchange('analysis_flag','ASC');">▲</A></font></th>
+	<th class="ksh_y"><font style="font-size: 12px"><A href="javascript:viewchange('analysis_date','DESC');">▼</A>&nbsp;date&nbsp;<A href="javascript:viewchange('analysis_date','ASC');">▲</A></font></th>
+	<th class="ksh_y"><font style="font-size: 12px"><A href="javascript:viewchange('analysis_time','DESC');">▼</A>&nbsp;time&nbsp;<A href="javascript:viewchange('analysis_time','ASC');">▲</A></font></th>
+	</tr>
+	<?
+	if(mysql_num_rows($result) <= 0){
+	}else{
+		while($h=mysql_fetch_array($result)){
+	?>
+		<tr>
+		<td align="center" class="ks"><font style="font-size: 10px"><?=$h[analysis_id]?></font></td>
+		<td align="center" class="ks"><font style="font-size: 10px"><?=$h[analysis_user]?></font></td>
+		<td align="center" class="ks"><font style="font-size: 10px"><?=$h[analysis_target]?></font></td>
+		<td align="center" class="ks"><font style="font-size: 10px"><?=$h[analysis_enz]?></font></td>
+		<td align="center" class="ks"><font style="font-size: 10px"><?=$h[analysis_flag]?></font></td>
+		<td align="center" class="ks"><font style="font-size: 10px"><?=$h[analysis_date]?></font></td>
+		<td align="center" class="ks"><font style="font-size: 10px"><?=$h[analysis_time]?></font></td>
+		</tr>
+	<?
+		}
+	}
+	?>
+	
+	</TABLE>
+	<TABLE width="<?=$width?>" cellpadding="3" cellspacing="0">
+	<tr>
+	<td colspan="7" align="right">
+	<a href="javascript:viewnumchange(10);">10</a>&nbsp;
+	<a href="javascript:viewnumchange(20);">20</a>&nbsp;
+	<a href="javascript:viewnumchange(30);">30</a>&nbsp;
+	<a href="javascript:viewnumchange(50);">50</a>&nbsp;
+	<a href="javascript:viewnumchange(100);">100</a>
+	</td>
+	</tr>
+	</TABLE>
+	<BR>
+	
+	<!-- ここまで -->
+		</TD>
+	</TR>
+	<?php require("require/fooder.html"); ?>
+	</TABLE>
+</TD></TR>
+</TABLE>
+</BODY>
+</HTML>

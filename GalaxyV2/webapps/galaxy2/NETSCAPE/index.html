@@ -1,0 +1,90 @@
+<HTML lang="en">
+<HEAD>
+<meta http-equiv="Content-Type"content="text/html;charset=iso-8859-1">
+<meta name="robots" content="noindex,nofollow">
+<TITLE>GALAXY SYSTEM NET</TITLE>
+<SCRIPT language="JavaScript">
+<!--HPB_SCRIPT_ROV_50
+//
+// Licensed Materials - Property of IBM
+// 83H7391, 42L1820
+// (C) Copyright IBM Corp. 1995, 1999  All Rights Reserved.
+//
+// Version: 5.0.1
+//
+
+// HpbImgPreload: ‰æ‘œ‚ÌƒvƒŠƒ[ƒh‚ðs‚È‚¢‚Ü‚·
+//
+function HpbImgPreload()
+{
+  var appVer=parseInt(navigator.appVersion);
+  var isNC=(document.layers && (appVer >= 4)); // Netscape Navigator 4.0 or later
+  var isIE=(document.all    && (appVer >= 4)); // Internet Explorer  4.0 or later
+  if (isNC || isIE)
+  {
+    if (document.images)
+    {
+      var imgName = HpbImgPreload.arguments[0];
+      var cnt;
+      swImg[imgName] = new Array;
+      for (cnt = 1; cnt < HpbImgPreload.arguments.length; cnt++)
+      {
+        swImg[imgName][HpbImgPreload.arguments[cnt]] = new Image();
+        swImg[imgName][HpbImgPreload.arguments[cnt]].src = HpbImgPreload.arguments[cnt];
+      }
+    }
+  }
+}
+// HpbImgFind: ImageƒIƒuƒWƒFƒNƒg‚ð’T‚µ‚Ü‚·
+//
+function HpbImgFind(doc, imgName)
+{
+  for (var i=0; i < doc.layers.length; i++)
+  {
+    var img = doc.layers[i].document.images[imgName];
+    if (!img) img = HpbImgFind(doc.layers[i], imgName);
+    if (img) return img;
+  }
+  return null;
+}
+// HpbImgSwap: ‰æ‘œ‚ð“ü‚êŠ·‚¦‚Ü‚·
+//
+function HpbImgSwap(imgName, imgSrc)
+{
+  var appVer=parseInt(navigator.appVersion);
+  var isNC=(document.layers && (appVer >= 4)); // Netscape Navigator 4.0 or later
+  var isIE=(document.all    && (appVer >= 4)); // Internet Explorer  4.0 or later
+  if (isNC || isIE)
+  {
+    if (document.images)
+    {
+      var img = document.images[imgName];
+      if (!img) img = HpbImgFind(document, imgName);
+      if (img) img.src = imgSrc;
+    }
+  }
+}
+var swImg; swImg=new Array;
+//-->
+</SCRIPT><SCRIPT language="JavaScript">
+<!--HPB_SCRIPT_PLD_50
+HpbImgPreload('_HPB_ROLLOVER3', '../image/n_image1.png', '../image/m_image1.png');
+HpbImgPreload('_HPB_ROLLOVER1', '../image/n_image3.png', '../image/m_image3.png');
+HpbImgPreload('_HPB_ROLLOVER2', '../image/n_image2.png', '../image/m_image2.png');
+//-->
+</SCRIPT></HEAD>
+<BODY bgcolor="#eeeeee">
+<P><B><FONT size="+1" color="#0000ff" face="Times New Roman">GALAXY ver 1.0</FONT></B></P>
+<applet archive="Oligosaccharide.jar" code="DrawExpHomeNewPanelNavin.class" codebase="./" width="860" height="590">
+</applet>
+<TABLE width="862">
+  <TBODY>
+    <TR>
+      <TD width="158"><A href="../list.html" id="_HPB_ROLLOVER3" onmouseout="HpbImgSwap('_HPB_ROLLOVER3','../image/n_image1.png');" onmouseover="HpbImgSwap('_HPB_ROLLOVER3','../image/m_image1.png');" target="_blank"><IMG src="../image/n_image1.png" width="156" height="24" border="0" name="_HPB_ROLLOVER3"></A></TD>
+      <TD width="156"><A href="../manual.html" id="_HPB_ROLLOVER2" onmouseout="HpbImgSwap('_HPB_ROLLOVER2','../image/n_image2.png');" onmouseover="HpbImgSwap('_HPB_ROLLOVER2','../image/m_image2.png');" target="_blank"><IMG src="../image/n_image2.png" width="156" height="24" border="0" name="_HPB_ROLLOVER2"></A></TD>
+      <TD align="right" width="526"><A href="printinfo.html" id="_HPB_ROLLOVER1" onmouseout="HpbImgSwap('_HPB_ROLLOVER1','../image/n_image3.png');" onmouseover="HpbImgSwap('_HPB_ROLLOVER1','../image/m_image3.png');"  target="_blank" ><IMG src="../image/n_image3.png" width="156" height="24" border="0" name="_HPB_ROLLOVER1"></A></TD>
+    </TR>
+  </TBODY>
+</TABLE>
+</BODY>
+</HTML>

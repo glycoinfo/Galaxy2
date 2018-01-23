@@ -1,0 +1,151 @@
+<?php
+	include "inc/common.php";
+	include "inc/access.php";
+	include "inc/style.php";
+	
+	$jisDate = $_SESSION[jisDate];
+	if($jisDate == ""){
+		$jisDate = date("Y/m/d");
+	}
+	
+	$target = $_REQUEST[target];
+	db_connection();
+	$sql = "select * from oligo_table where oligo_id = $target";
+	$result = mysql_query($sql);
+	$h = mysql_fetch_array($result);
+?>
+
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=Shift_JIS">
+<link href="common/ks_table2.css" rel="stylesheet" type="text/css">
+<TITLE><?=TITLE?></TITLE>
+
+<STYLE type="text/css">
+<!--
+//-->
+</STYLE>
+
+<SCRIPT type="text/javascript">
+<!--
+function st_save(){
+	document.frmMain.action = "oligo_update.php";
+	document.frmMain.method = "post";
+	document.frmMain.submit();
+}
+function st_change(){
+	document.frmMain.action = "oligo_update_st.php";
+	document.frmMain.method = "post";
+	document.frmMain.submit();
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<BODY marginwidth="0px" marginheight="0px" leftMargin="0px" topMargin="0px" bgcolor="#ffffff">
+<TABLE border="0" cellpadding="0" cellspacing="0" align="center" width="100%">
+<TR><TD>
+	<TABLE border="0" cellpadding="0" cellspacing="0" width="100%"  bordercolor="">
+	<?php require("require/header.html"); ?>
+	<?php require("require/menu_yoko.html"); ?>
+	<TR>
+		<?php require("require/menu_tate.html"); ?>
+		<TD align="center" width="100%" valign="top">
+		<!-- ここから -->
+		<TABLE border="0" cellpadding="0" cellspacing="0" width="100%">
+		<TR>
+		<TD align="center" bgcolor="<?=info_bg?>" height="30">
+			<FONT color="<?=info_st_bg?>" style="font-size : 15px">
+			<B>-&nbsp;&nbsp;既知糖鎖 登録情報詳細&nbsp;&nbsp;-</B>
+			</FONT>
+		</TD>
+		</TR>
+		</TABLE>
+		<BR>
+		<FORM method="post" name="frmMain" action="">
+		<TABLE class="ks" width="600" cellpadding="3" cellspacing="0">
+		<TR>
+			<TD align="center" class="ksh_t">id</TD>
+			<TD align="left" class="ks"><?=$h[oligo_id]?><input type="hidden" name="oligo_id" value="<?=$h[oligo_id]?>"></TD>
+		</TR>
+		<TR>
+			<TD align="center" class="ksh_t">code</TD>
+			<TD align="left" class="ks"><INPUT type="text" name="oligo_code" value="<?=$h[oligo_code]?>"></TD>
+		</TR>
+		<TR>
+			<TD align="center" class="ksh_t">structure</TD>
+			<TD align="left" class="ks"><INPUT type="text" name="oligo_structure" size="80" value="<?=$h[oligo_structure]?>"></TD>
+		</TR>
+		<TR>
+			<TD align="center" class="ksh_t">ods</TD>
+			<TD align="left" class="ks"><INPUT type="text" name="oligo_ods" value="<?=$h[oligo_ods]?>"></TD>
+		</TR>
+		<TR>
+			<TD align="center" class="ksh_t">amide</TD>
+			<TD align="left" class="ks"><INPUT type="text" name="oligo_amide" value="<?=$h[oligo_amide]?>"></TD>
+		</TR>
+		<TR>
+			<TD align="center" class="ksh_t">mw</TD>
+			<TD align="left" class="ks"><INPUT type="text" name="oligo_mw" value="<?=$h[oligo_mw]?>"></TD>
+		</TR>
+		<TR>
+			<TD align="center" class="ksh_t">pref</TD>
+			<TD align="left" class="ks"><INPUT type="text" name="oligo_pref" value="<?=$h[oligo_pref]?>"></TD>
+		</TR>
+		<TR>
+			<TD align="center" class="ksh_t">source</TD>
+			<TD align="left" class="ks"><INPUT type="text" name="oligo_source" size="50" value="<?=$h[oligo_source]?>"></TD>
+		</TR>
+		<TR>
+			<TD align="center" class="ksh_t">info</TD>
+			<TD align="left" class="ks"><TEXTAREA name="oligo_info" rows="5" cols="60"><?=$h[oligo_info]?></TEXTAREA></TD>
+		</TR>
+		<TR>
+			<TD align="center" class="ksh_t">enz1</TD>
+			<TD align="left" class="ks"><INPUT type="text" name="enz1" size="5" value="<?=$h[enz1]?>"></TD>
+		</TR>
+		<TR>
+			<TD align="center" class="ksh_t">enz2</TD>
+			<TD align="left" class="ks"><INPUT type="text" name="enz2" size="5" value="<?=$h[enz2]?>"></TD>
+		</TR>
+		<TR>
+			<TD align="center" class="ksh_t">enz3</TD>
+			<TD align="left" class="ks"><INPUT type="text" name="enz3" size="5" value="<?=$h[enz3]?>"></TD>
+		</TR>
+		<TR>
+			<TD align="center" class="ksh_t">enz4</TD>
+			<TD align="left" class="ks"><INPUT type="text" name="enz4" size="5" value="<?=$h[enz4]?>"></TD>
+		</TR>
+		<TR>
+			<TD align="center" class="ksh_t">enz5</TD>
+			<TD align="left" class="ks"><INPUT type="text" name="enz5" size="5" value="<?=$h[enz5]?>"></TD>
+		</TR>
+		<TR>
+			<TD align="center" class="ksh_t">enz6</TD>
+			<TD align="left" class="ks"><INPUT type="text" name="enz6" size="5" value="<?=$h[enz6]?>"></TD>
+		</TR>
+		<TR>
+			<TD align="center" class="ksh_t">glycan</TD>
+			<TD align="left" class="ks"><INPUT type="text" name="glycan" size="5" value="<?=$h[glycan]?>"></TD>
+		</TR>
+		<TR>
+			<TD align="center" class="ksh_t">stat</TD>
+			<TD align="left" class="ks"><INPUT type="text" name="stat" size="2" value="<?=$h[stat]?>"></TD>
+		</TR>
+		</TABLE>
+		
+		<INPUT type="button" value=" - 保存 - " onClick="javascript:st_save();">
+		<INPUT type="button" value=" - ステータス変更 - " onClick="javascript:st_change();">
+		<INPUT type="button" value=" - 戻る - " onClick="history.back();">
+		<BR>
+		<BR>
+		
+		<!-- ここまで -->
+	</TD>
+	</TR>
+	<?php require("require/fooder.html"); ?>
+	</TABLE>
+</TD></TR>
+</TABLE>
+</BODY>
+</HTML>

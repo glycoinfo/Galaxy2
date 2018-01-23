@@ -1,0 +1,217 @@
+<?php
+	include "inc/common.php";
+	include "inc/access.php";
+	include "inc/style.php";
+	$script_name = "oligo_master_miti.htm";
+	
+	$jisDate = $_SESSION[jisDate];
+	if($jisDate == ""){
+		$jisDate = date("Y/m/d");
+	}
+	
+	$limit = $_REQUEST[limit];
+	
+	$view1 = $_REQUEST[view1];
+	$view2 = $_REQUEST[view2];
+	
+	$sort1 = $_REQUEST[sort1];
+	$sort2 = $_REQUEST[sort2];
+	
+	$viewnum = $_REQUEST[viewnum];
+	
+	if($limit == "" || $limit <= 0){
+		$limit = 0;
+	}
+	if($view1 == ""){
+		$view1 = "oligo_id";
+	}
+	if($view2 == ""){
+		$view2 = "DESC";
+	}
+	if($sort1 ==""){
+		$sort1 = "";
+	}
+	if($sort2 == ""){
+		$sort2 = "";
+	}
+	if($viewnum == ""){
+		$viewnum = 20;
+	}
+	$target_table = "oligo_table_miti";
+	$target_row = "oligo_id";
+	$width="1000";
+	
+	$_SESSION[return_q] = $_SERVER["QUERY_STRING"];
+?>
+
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=Shift_JIS">
+<link href="common/ks_table2.css" rel="stylesheet" type="text/css">
+<TITLE><?=TITLE?></TITLE>
+
+<STYLE type="text/css">
+<!--
+//-->
+</STYLE>
+
+<SCRIPT type="text/javascript">
+<!--
+	function limitchange(set_value){
+		document.frm1.limit.value = set_value;
+		document.frm1.submit();
+	}
+	function viewnumchange(set_value){
+		document.frm1.viewnum.value = set_value;
+		document.frm1.submit();
+	}
+	function viewchange(set_value1,set_value2){
+		document.frm1.view1.value = set_value1;
+		document.frm1.view2.value = set_value2;
+		document.frm1.submit();
+	}
+	function resetsubmit(){
+		document.frm1.limit.value = "";
+		document.frm1.view1.value = "";
+		document.frm1.view2.value = "";
+		document.frm1.sort1.value = "";
+		document.frm1.sort2.value = "";
+		document.frm1.viewnum.value = "";
+		document.frm1.submit();
+	}
+//-->
+</SCRIPT>
+
+</HEAD>
+<BODY marginwidth="0px" marginheight="0px" leftMargin="0px" topMargin="0px" bgcolor="#ffffff">
+<TABLE border="0" cellpadding="0" cellspacing="0" align="center" width="100%">
+<TR><TD>
+
+<TABLE border="0" cellpadding="0" cellspacing="0" width="100%" bordercolor="">
+	<?php require("require/header.html"); ?>
+	<?php require("require/menu_yoko.html"); ?>
+	<TR>
+		<?php require("require/menu_tate.html"); ?>
+		<TD align="center" width="100%" valign="top">
+		
+	<!-- ここから -->
+	<TABLE border="0" cellpadding="0" cellspacing="0" width="100%">
+	<TR>
+	<TD align="center" bgcolor="<?=info_bg?>" height="30">
+		<FONT color="<?=info_st_bg?>" style="font-size : 15px">
+		<B>-&nbsp;&nbsp;登録データ(未知糖鎖)&nbsp;<A href="http://www.glycoanalysis.net/galaxy2/systemin2.jsp" target=_blank>(site)</A>&nbsp;&nbsp;-</B>
+		</FONT>
+	</TD>
+	</TR>
+	</TABLE>
+	<BR>
+	<FORM method="get" name="frm1" action="<?=$script_name?>">
+	<SELECT name="sort1">
+		<OPTION value="" selected>--</OPTION>
+		<OPTION value="oligo_code" <? if($sort1=="oligo_code"){ echo selected; }?> >oligo_code</OPTION>
+		<OPTION value="oligo_structure" <? if($sort1=="oligo_structure"){ echo selected; }?> >oligo_structure</OPTION>
+		<OPTION value="oligo_ods" <? if($sort1=="oligo_ods"){ echo selected; }?> >oligo_ods</OPTION>
+		<OPTION value="oligo_amide" <? if($sort1=="oligo_amide"){ echo selected; }?> >oligo_amide</OPTION>
+		<OPTION value="oligo_mw" <? if($sort1=="oligo_mw"){ echo selected; }?> >oligo_mw</OPTION>
+		<OPTION value="oligo_pref" <? if($sort1=="oligo_pref"){ echo selected; }?> >oligo_pref</OPTION>
+		<OPTION value="oligo_source" <? if($sort1=="oligo_source"){ echo selected; }?> >oligo_source</OPTION>
+	</SELECT>
+	<INPUT type="text" name="sort2" value=<?=$sort2?> >
+	<INPUT type="submit" value=" - 検索 - ">
+	<INPUT type="button" value=" - クリア - " onClick="resetsubmit();">
+	<INPUT type="hidden" name="limit" value="<?=$limit?>">
+	<INPUT type="hidden" name="view1" value="<?=$view1?>">
+	<INPUT type="hidden" name="view2" value="<?=$view2?>">
+	<INPUT type="hidden" name="viewnum" value="<?=$viewnum?>">
+	<!--<INPUT type="button" value=" - To CSV - " onClick="location.href='galaxy_dl.php';">-->
+	</FORM>
+	
+	<?
+	db_connection();
+	$sqls = "select $target_row from $target_table ORDER BY oligo_id;";
+	$results = mysql_query($sqls);
+	echo "登録数: " . mysql_num_rows($results);
+	
+	
+	$sort_st = "";
+	if($sort1 != "" && $sort2 != ""){
+		$sort_st = "WHERE $sort1 LIKE '%$sort2%'";
+	}
+	
+	
+	$sql = "select * from $target_table $sort_st ORDER BY $view1 $view2 LIMIT $limit,$viewnum;";
+	$dlsql = "select * from $target_table $sort_st ORDER BY $view1 $view2;";
+	$_SESSION[dlsql] = $dlsql;
+	
+	$result = mysql_query($sql);
+	print "<table border=0 width=\"$width\" height=25 cellpadding=0 cellspacing=0 bordercolor=\"white\">\n";
+	if($limit == "" || $limit == "0"){
+		print "<tr><td align=left><font color=\"#666666\"> ← [　前の $viewnum 件　] </font></td><td align=center colspan=4><B>".($limit)."-".($limit+$viewnum)."</B></td><td align=right><A href=\"javascript:limitchange('".( $limit+$viewnum )."');\"><b>[　次の $viewnum 件　] → </b></A></td></tr>";
+	}else{
+		print "<tr><td align=left><A href=\"javascript:limitchange('".( $limit-$viewnum )."');\"><b> ← [　前の $viewnum 件　] </b></A></td><td align=center colspan=4><B>".($limit)."-".($limit+$viewnum)."</B></td><td align=right><A href=\"javascript:limitchange('".( $limit+$viewnum )."');\"><b>[　次の $viewnum 件　] → </b></A></td></tr>";
+	}
+	print "</table>\n";
+	?>
+	
+	<TABLE class="ks" width="<?=$width?>" cellpadding="3" cellspacing="0">
+	<tr bgcolor="#FFCC66">
+	<th class="ksh_y"><font style="font-size: 12px"><A href="javascript:viewchange('oligo_id','DESC');">▼</A>&nbsp;ID&nbsp;<A href="javascript:viewchange('oligo_id','ASC');">▲</A></font></th>
+		<th class="ksh_y"><font style="font-size: 12px"><A href="javascript:viewchange('oligo_code','DESC');">▼</A>&nbsp;Code&nbsp;<A href="javascript:viewchange('oligo_code','ASC');">▲</A></font></th>
+	<th class="ksh_y"><font style="font-size: 12px"><A href="javascript:viewchange('oligo_structure','DESC');">▼</A>&nbsp;Structure&nbsp;<A href="javascript:viewchange('oligo_structure','ASC');">▲</A></font></th>
+	<th class="ksh_y"><font style="font-size: 12px"><A href="javascript:viewchange('oligo_ods','DESC');">▼</A>&nbsp;Ods&nbsp;<A href="javascript:viewchange('oligo_ods','ASC');">▲</A></font></th>
+	<th class="ksh_y"><font style="font-size: 12px"><A href="javascript:viewchange('oligo_amide','DESC');">▼</A>&nbsp;Amide&nbsp;<A href="javascript:viewchange('oligo_amide','ASC');">▲</A></font></th>
+	<th class="ksh_y"><font style="font-size: 12px"><A href="javascript:viewchange('oligo_mw','DESC');">▼</A>&nbsp;Mw&nbsp;<A href="javascript:viewchange('oligo_mw','ASC');">▲</A></font></th>
+	<th class="ksh_y"><font style="font-size: 12px"><A href="javascript:viewchange('oligo_pref','DESC');">▼</A>&nbsp;Pref&nbsp;<A href="javascript:viewchange('oligo_pref','ASC');">▲</A></font></th>
+	<th class="ksh_y"><font style="font-size: 12px"><A href="javascript:viewchange('oligo_source','DESC');">▼</A>&nbsp;Source&nbsp;<A href="javascript:viewchange('oligo_source','ASC');">▲</A></font></th>
+	<th class="ksh_y"><font style="font-size: 12px"><A href="javascript:viewchange('stat','DESC');">▼</A>&nbsp;Stat&nbsp;<A href="javascript:viewchange('stat','ASC');">▲</A></font></th>
+	</tr>
+	<?
+	if(mysql_num_rows($result) <= 0){
+	}else{
+		while($h=mysql_fetch_array($result)){
+	?>
+		<?if($h[stat] == 0){?>
+		<tr bgcolor="#ffffff">
+		<?}else{?>
+		<tr bgcolor="#cccccc">
+		<?}?>
+		<td align="center" class="ks"><font style="font-size: 10px"><?=$h[oligo_id]?></font></td>
+		<td align="center" class="ks"><font style="font-size: 10px"><?=$h[oligo_code]?></font></td>
+		<td align="left" class="ks"><font style="font-size: 10px"><?=$h[oligo_structure]?></font></td>
+		<td align="center" class="ks"><font style="font-size: 10px"><?=$h[oligo_ods]?></font></td>
+		<td align="center" class="ks"><font style="font-size: 10px"><?=$h[oligo_amide]?></font></td>
+		<td align="center" class="ks"><font style="font-size: 10px"><?=$h[oligo_mw]?></font></td>
+		<td align="center" class="ks"><font style="font-size: 10px"><?=$h[oligo_pref]?></font></td>
+		<td align="center" class="ks"><font style="font-size: 10px"><?=$h[oligo_source]?></font></td>
+		<td align="center" class="ks"><font style="font-szie: 10px">
+			<input style="font-size:11px" type=button value=" - 確認 - " onClick="location.href='oligo_master_miti_view.htm?target=<?=$h[oligo_id]?>';">
+		</font></td>
+		</tr>
+	<?
+		}
+	}
+	?>
+	
+	</TABLE>
+	<TABLE width="<?=$width?>" cellpadding="3" cellspacing="0">
+	<tr>
+	<td colspan="7" align="right">
+	<a href="javascript:viewnumchange(10);">10</a>&nbsp;
+	<a href="javascript:viewnumchange(20);">20</a>&nbsp;
+	<a href="javascript:viewnumchange(30);">30</a>&nbsp;
+	<a href="javascript:viewnumchange(50);">50</a>&nbsp;
+	<a href="javascript:viewnumchange(100);">100</a>
+	</td>
+	</tr>
+	</TABLE>
+	<BR>
+	
+	<!-- ここまで -->
+		</TD>
+	</TR>
+	<?php require("require/fooder.html"); ?>
+	</TABLE>
+</TD></TR>
+</TABLE>
+</BODY>
+</HTML>

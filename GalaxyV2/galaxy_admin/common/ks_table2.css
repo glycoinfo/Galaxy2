@@ -1,0 +1,54 @@
+
+table.ks {
+	border:3px solid #cccccc;
+	empty-cells:show;
+	border-collapse: collapse;
+}
+
+td.ks{
+	border-top:1px solid #ccccff;
+	border-bottom:1px solid #cccccc;
+	border-left:1px solid  #ccccff;
+	border-right:1px solid #ccccff;
+}
+
+td.ksh_y{
+	border-top:1px solid #ccccff;
+	border-bottom:3px double #cccccc;
+	border-left:1px solid  #ccccff;
+	border-right:1px solid #ccccff;
+}
+
+td.ksh_t{
+	border-top:1px solid #ccccff;
+	border-bottom:1px solid #ccccff;
+	border-left:1px solid  #ccccff;
+	border-right:3px double #cccccc;
+}
+
+td.ksh_yt{
+	border-top:1px solid #ccccff;
+	border-bottom:3px double #cccccc;
+	border-left:1px solid  #ccccff;
+	border-right:3px double #cccccc;
+}
+th.ksh_y{
+	border-top:1px solid #ccccff;
+	border-bottom:3px double #cccccc;
+	border-left:1px solid  #ccccff;
+	border-right:1px solid #ccccff;
+}
+
+th.ksh_t{
+	border-top:1px solid #ccccff;
+	border-bottom:1px solid #ccccff;
+	border-left:1px solid  #ccccff;
+	border-right:3px double #cccccc;
+}
+
+th.ksh_yt{
+	border-top:1px solid #ccccff;
+	border-bottom:3px double #cccccc;
+	border-left:1px solid  #ccccff;
+	border-right:3px double #cccccc;
+}
